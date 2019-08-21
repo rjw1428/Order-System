@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import Auxil from '../../hoc/Auxil'
 import Burger from '../../components/Burger/Burger'
 import BuildControls from '../../components/Burger/BuildControls/BuildControls'
+import Modal from '../../components/UI/Modal/Modal'
+import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary'
 
 const INGREDIENT_PRICES = {
     lettuce: .25,
@@ -18,7 +20,16 @@ class BurgerBuilder extends Component {
             cheese: 0,
             meat: 0
         },
-        totalPrice: 4.0
+        totalPrice: 4.0,
+        buyable: false,
+        checkoutMode: false
+    }
+
+    updateBuyState (ingredients) {
+        const sum=Object.values(ingredients).reduce((sum, val)=>{
+            return sum+val
+        },0)
+        this.setState({buyable: sum>0})
     }
 
     addIngredientHandler = (type) => {
@@ -34,6 +45,7 @@ class BurgerBuilder extends Component {
         const newPrice = oldPrice + priceChange
 
         this.setState({ totalPrice: +newPrice, ingredients: updatedIngredients })
+        this.updateBuyState(updatedIngredients)
     }
 
     removeIngredientHandler = (type) => {
@@ -49,7 +61,16 @@ class BurgerBuilder extends Component {
             const newPrice = oldPrice - priceChange
             
             this.setState({ totalPrice: newPrice, ingredients: updatedIngredients })
+            this.updateBuyState(updatedIngredients)
         }
+    }
+
+    checkoutModeHandler = () => {
+        this.setState({checkoutMode: true})
+    }
+
+    cancelCheckoutMode = () => {
+        this.setState({checkoutMode: false})
     }
 
     render() {
@@ -61,12 +82,20 @@ class BurgerBuilder extends Component {
         })
         return (
             <Auxil>
+                <Modal 
+                show={this.state.checkoutMode}
+                closeModal={this.cancelCheckoutMode}
+                >
+                    <OrderSummary ingredients={this.state.ingredients}/>
+                </Modal>
                 <Burger ingredients={this.state.ingredients} />
                 <BuildControls
                     addIngredient={this.addIngredientHandler}
                     removeIngredient={this.removeIngredientHandler}
                     disabled={disableButton}
                     price={this.state.totalPrice}
+                    purchasable={this.state.buyable}
+                    ordering={this.checkoutModeHandler}
                 />
             </Auxil>
         );
