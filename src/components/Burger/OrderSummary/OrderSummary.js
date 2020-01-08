@@ -1,5 +1,7 @@
 import React from 'react'
 import Auxil from '../../../hoc/Auxil'
+import Button from '../../UI/Button/Button'
+
 const orderSummary = (props) => {
     const summary = Object.keys(props.ingredients)
         .map(ikey => {
@@ -16,7 +18,10 @@ const orderSummary = (props) => {
             <ul>
                 {summary}
             </ul>
+            <p><strong>Total Price: $ {props.price.toFixed(2)}</strong></p>
             <p>Continue to Checkout?</p>
+            <Button btnType="Danger" clicked={props.onCancel}>CANCEL</Button>
+            <Button btnType="Success" clicked={props.onCheckout}>CONTIUE</Button>
         </Auxil>
     )
 }

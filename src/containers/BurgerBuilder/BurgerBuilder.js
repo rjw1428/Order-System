@@ -72,7 +72,9 @@ class BurgerBuilder extends Component {
     cancelCheckoutMode = () => {
         this.setState({checkoutMode: false})
     }
-
+    checkoutContinueHandler = () => {
+        alert("CONGRATS BRA!")
+    }
     render() {
         const disableButton = {
             ...this.state.ingredients
@@ -83,10 +85,15 @@ class BurgerBuilder extends Component {
         return (
             <Auxil>
                 <Modal 
-                show={this.state.checkoutMode}
-                closeModal={this.cancelCheckoutMode}
+                    show={this.state.checkoutMode}
+                    closeModal={this.cancelCheckoutMode}
                 >
-                    <OrderSummary ingredients={this.state.ingredients}/>
+                <OrderSummary 
+                    ingredients={this.state.ingredients}
+                    onCheckout={this.checkoutContinueHandler}
+                    onCancel={this.cancelCheckoutMode}
+                    price={this.state.totalPrice}
+                />
                 </Modal>
                 <Burger ingredients={this.state.ingredients} />
                 <BuildControls
