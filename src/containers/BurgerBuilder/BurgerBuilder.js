@@ -4,6 +4,7 @@ import Burger from '../../components/Burger/Burger'
 import BuildControls from '../../components/Burger/BuildControls/BuildControls'
 import Modal from '../../components/UI/Modal/Modal'
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary'
+import axios from '../../axios-orders'
 
 const INGREDIENT_PRICES = {
     lettuce: .25,
@@ -73,7 +74,25 @@ class BurgerBuilder extends Component {
         this.setState({checkoutMode: false})
     }
     checkoutContinueHandler = () => {
-        alert("Hello Chelsey 😉")
+        const order = {
+            ingredients: this.state.ingredients,
+            price: this.state.totalPrice,
+            customer: {
+                name: 'Ryan',
+                address: {
+                    street: '1234 Carter Rd',
+                    zip: '92101',
+                },
+                email: 'test@test.com'
+            },
+            shipping: 'LIGHT SPEED'
+        }
+        axios.post('/orders.json', order)
+        .then(resp=>alert("Order Submitted"))
+        .catch(err=>alert("Oops... Something went wrong with your order!!!"))
+        .finally(()=>{
+            this.setState({checkoutMode: false})
+        })
     }
     render() {
         const disableButton = {
