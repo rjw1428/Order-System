@@ -73,7 +73,7 @@ class BurgerBuilder extends Component {
         this.setState({checkoutMode: false})
     }
     checkoutContinueHandler = () => {
-        alert("CONGRATS BRA!")
+        alert("Hello Chelsey 😉")
     }
     render() {
         const disableButton = {
